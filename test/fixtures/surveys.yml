@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  status: MyString
+  distribution_mode: MyString
+  is_mobile_friendly: false
+  scale: one
+
+two:
+  title: MyString
+  status: MyString
+  distribution_mode: MyString
+  is_mobile_friendly: false
+  scale: two

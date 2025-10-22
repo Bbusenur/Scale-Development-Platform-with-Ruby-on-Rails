@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  unique_scale_id: MyString
+  title: MyString
+  version: MyString
+  last_validated_at: 2025-10-19 19:33:23
+  is_public: false
+  user: one
+
+two:
+  unique_scale_id: MyString
+  title: MyString
+  version: MyString
+  last_validated_at: 2025-10-19 19:33:23
+  is_public: false
+  user: two

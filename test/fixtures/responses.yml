@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  participant_id: MyString
+  raw_data: 
+  survey: one
+
+two:
+  participant_id: MyString
+  raw_data: 
+  survey: two
