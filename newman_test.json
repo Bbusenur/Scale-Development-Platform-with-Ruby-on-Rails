@@ -1,0 +1,326 @@
+SDP API - Complete Collection
+
+❏ Users
+↳ Get All Users
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'users' ]
+  │ , host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  GET http://localhost:3000/api/v1/users [200 OK, 2.39kB, 408ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Create User
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'users' ]
+  │ , host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  POST http://localhost:3000/api/v1/users [201 Created, 824B, 48ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+  ┌
+  │ "Kullanıcı ID'si başarıyla kaydedildi: 19"
+  └
+
+↳ Get User by ID
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'users', '{{userId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  GET http://localhost:3000/api/v1/users/19 [200 OK, 778B, 19ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Update User
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'users', '{{userId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  │ '✅ Using userId:', 19, 'Type:', 'number'
+  └
+  PATCH http://localhost:3000/api/v1/users/19 [200 OK, 854B, 38ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Delete User
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'users', '{{userId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  │ '✅ Using userId:', 19, 'Type:', 'number'
+  └
+  DELETE http://localhost:3000/api/v1/users/19 [204 No Content, 547B, 21ms]
+  ✓  Response time is less than 5000ms
+  1. Response has proper content type
+
+❏ Scales
+↳ Get All Scales
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'scales'
+  │ ], host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  GET http://localhost:3000/api/v1/scales [200 OK, 4.11kB, 53ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Create Scale
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'scales'
+  │ ], host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  POST http://localhost:3000/api/v1/scales [404 Not Found, 532B, 14ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Get Scale by ID
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'scales', '{{scaleId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  GET http://localhost:3000/api/v1/scales/ [200 OK, 4.11kB, 19ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+❏ Surveys
+↳ Get All Surveys
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'surveys'
+  │  ], host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  GET http://localhost:3000/api/v1/surveys [200 OK, 1.24kB, 49ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Create Survey
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'scales', '{{scaleId}}', 'surveys'
+  │ 39m ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  POST http://localhost:3000/api/v1/scales//surveys [404 Not Found, 5.47kB, 11ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Get Survey by ID
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'surveys', '{{surveyId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  GET http://localhost:3000/api/v1/surveys/ [200 OK, 1.24kB, 21ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Update Survey
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'surveys', '{{surveyId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  PUT http://localhost:3000/api/v1/surveys/ [404 Not Found, 5.46kB, 12ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+❏ Responses
+↳ Get Survey Responses
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'surveys', '{{surveyId}}', 'response
+  │ s' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  GET http://localhost:3000/api/v1/surveys//responses [404 Not Found, 535B, 13ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Create Response
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'surveys', '{{surveyId}}', 'response
+  │ s' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  POST http://localhost:3000/api/v1/surveys//responses [404 Not Found, 5.47kB, 8ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Get Response by ID
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'responses', '{{responseId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  GET http://localhost:3000/api/v1/responses/ [404 Not Found, 5.46kB, 9ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Update Response
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'responses', '{{responseId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  PUT http://localhost:3000/api/v1/responses/ [404 Not Found, 5.46kB, 7ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+❏ Analysis
+↳ Create Analysis
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'analysis'
+  │ m ], host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  POST http://localhost:3000/api/v1/analysis [400 Bad Request, 16.51kB, 45ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ Get Analysis Result
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'analysis', '{{analysisId}}' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  GET http://localhost:3000/api/v1/analysis/ [200 OK, 561B, 17ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+❏ Credit Transactions
+↳ Get Credit Transactions
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'credit_transactions' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  GET http://localhost:3000/api/v1/credit_transactions [200 OK, 1.24kB, 44ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+❏ Test Scenarios / Complete Workflow Test
+↳ 1. Create User
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'users' ]
+  │ , host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  POST http://localhost:3000/api/v1/users [201 Created, 827B, 38ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+  ┌
+  │ 'User created with ID:', 20
+  └
+
+↳ 2. Create Scale
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'scales'
+  │ ], host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  POST http://localhost:3000/api/v1/scales [404 Not Found, 532B, 9ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ 3. Create Survey
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'scales', '{{scaleId}}', 'surveys'
+  │ 39m ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  POST http://localhost:3000/api/v1/scales//surveys [404 Not Found, 5.47kB, 18ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ 4. Create Response
+  ┌
+  │ 'Making request to:', {
+  │   path: [ 'api', 'v1', 'surveys', '{{surveyId}}', 'response
+  │ s' ],
+  │   host: [ '{{baseUrl}}' ],
+  │   query: [],
+  │   variable: []
+  │ }
+  └
+  POST http://localhost:3000/api/v1/surveys//responses [404 Not Found, 5.47kB, 8ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+↳ 5. Start Analysis
+  ┌
+  │ 'Making request to:', { path: [ 'api', 'v1', 'analysis'
+  │ m ], host: [ '{{baseUrl}}' ], query: [], variable: [] }
+  └
+  POST http://localhost:3000/api/v1/analysis [400 Bad Request, 16.51kB, 26ms]
+  ✓  Response time is less than 5000ms
+  ✓  Response has proper content type
+
+┌─────────────────────────┬───────────────────┬──────────────────┐
+│                         │          executed │           failed │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              iterations │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│                requests │                24 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│            test-scripts │                33 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│      prerequest-scripts │                26 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              assertions │                48 │                1 │
+├─────────────────────────┴───────────────────┴──────────────────┤
+│ total run duration: 4.1s                                       │
+├────────────────────────────────────────────────────────────────┤
+│ total data received: 80.99kB (approx)                          │
+├────────────────────────────────────────────────────────────────┤
+│ average response time: 39ms [min: 7ms, max: 408ms, s.d.: 78ms] │
+└────────────────────────────────────────────────────────────────┘
+
+  #  failure                detail
+
+ 1.  AssertionError         Response has proper content type
+                            the given combination of arguments (undefined and string) is invalid for this
+                            assertion. You can use an array, a map, an object, a set, a string, or a weakset
+                            instead of a string
+                            at assertion:1 in test-script
+                            inside "Users / Delete User"

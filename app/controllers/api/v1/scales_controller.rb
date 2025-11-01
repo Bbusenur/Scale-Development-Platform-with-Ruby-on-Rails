@@ -1,61 +1,59 @@
 class Api::V1::ScalesController < ApplicationController
-  # SDP Kuralı: Ölçek geliştirme maliyeti 15 Kredi (10-20 aralığından)
   SCALE_CREATION_COST = 15 
 
-
   def index
-    # Tüm ölçekleri listeler
     @scales = Scale.all 
     render json: @scales
   end
 
+  def show
+    @scale = Scale.find(params[:id])
+    render json: @scale
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Ölçek bulunamadı." }, status: :not_found
+  end
 
   def create
-    #  Kullanıcıyı bul
-    # Gelen isteğin user_id'sini kullanarak ilgili User kaydını bulur
-    @user = User.find(scale_params[:user_id]) 
+    user_id_param = scale_params[:user_id].to_i
     
-    #  Kredi kontrolü ve düşürme işlemi
-    # use_credits metodu true/false döndürür ve bakiye yeterliyse düşürür.
+    @user = User.find(user_id_param)
+
     unless @user.use_credits(SCALE_CREATION_COST) 
-      # Kredi yetersizse, işlemi hemen keser ve 402 HATA KODU döndürür.
       return render json: { 
         error: "Yetersiz kredi bakiyesi. Ölçek oluşturma maliyeti: #{SCALE_CREATION_COST} kredi.",
         current_balance: @user.credit_balance
       }, status: :payment_required 
     end
 
-    # 3. Ölçek kaydını oluştur (Kredi düşürüldü, şimdi kaydı yap)
     @scale = @user.scales.new(scale_params)
     
     if @scale.save
-      # 4. İşlem kaydını oluştur (Raporlama ve takip için)
       CreditTransaction.create(
         user: @user,
         cost: SCALE_CREATION_COST,
         activity_type: 'ScaleDevelopment',
         transaction_date: Time.current
       )
-      
-
       render json: @scale, status: :created
     else
       render json: @scale.errors, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Kullanıcı bulunamadı." }, status: :not_found
   end
   
-  def run_validation
+  def update
     @scale = Scale.find(params[:id])
-    @scale.run_ai_validation 
-    render json: { message: "AI destekli doğrulama başlatıldı.", validated_at: @scale.last_validated_at }
+    
+    if @scale.update(scale_params)
+      render json: @scale, status: :ok
+    else
+      render json: @scale.errors, status: :unprocessable_entity
+    end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Güncellenecek ölçek bulunamadı." }, status: :not_found
   end
 
-
-  def show
-    @scale = Scale.find(params[:id])
-    render json: @scale
-  end
-#  Silme
   def destroy
     @scale = Scale.find(params[:id])
 
@@ -66,10 +64,16 @@ class Api::V1::ScalesController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Silinecek ölçek bulunamadı." }, status: :not_found
   end
+
   private
   
-
   def scale_params
-    params.require(:scale).permit(:title, :version, :is_public, :unique_scale_id, :user_id) 
+    permitted_keys = [:title, :version, :is_public, :unique_scale_id, :user_id]
+    
+    if params[:scale].present?
+      params.require(:scale).permit(*permitted_keys)
+    else
+      params.permit(*permitted_keys)
+    end
   end
 end

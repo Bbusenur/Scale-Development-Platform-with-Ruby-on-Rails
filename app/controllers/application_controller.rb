@@ -8,4 +8,12 @@ class ApplicationController < ActionController::API
   # def authenticate_user!
   #   # ... JWT kontrol mantığı ...
   # end
+
+  rescue_from ActionController::ParameterMissing do |e|
+    render json: { error: "Geçersiz istek: eksik veya hatalı gövde.", details: e.message }, status: :bad_request
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: { error: "Kayıt bulunamadı.", details: e.message }, status: :not_found
+  end
 end

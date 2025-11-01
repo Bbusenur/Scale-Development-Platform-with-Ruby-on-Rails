@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_19_163413) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_29_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "analyses", force: :cascade do |t|
+    t.bigint "survey_id", null: false
+    t.string "analysis_type", null: false
+    t.string "status", default: "Queued", null: false
+    t.jsonb "result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_analyses_on_status"
+    t.index ["survey_id"], name: "index_analyses_on_survey_id"
+  end
 
   create_table "credit_transactions", force: :cascade do |t|
     t.integer "cost"
@@ -68,6 +79,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_19_163413) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "analyses", "surveys"
   add_foreign_key "credit_transactions", "users"
   add_foreign_key "responses", "surveys"
   add_foreign_key "scales", "users"

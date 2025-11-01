@@ -1,0 +1,68 @@
+{
+    "info": {
+        "_postman_id": "YOUR_UNIQUE_COLLECTION_ID",
+        "name": "Projem API",
+        "description": "Bu koleksiyon, projemdeki ana API endpoint'lerini içerir.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Tüm Kullanıcıları Getir",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/users",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "users"
+                    ]
+                },
+                "description": "Sistemdeki tüm kayıtlı kullanıcıları döndürür."
+            },
+            "response": []
+        },
+        {
+            "name": "Yeni Kullanıcı Oluştur",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"Ada Lovelace\",\n    \"email\": \"ada.lovelace@example.com\",\n    \"password\": \"SuperSecret123!\"\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/users",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "users"
+                    ]
+                },
+                "description": "Verilen bilgilerle yeni bir kullanıcı kaydı oluşturur."
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8080/api/v1",
+            "type": "string"
+        }
+    ]
+}

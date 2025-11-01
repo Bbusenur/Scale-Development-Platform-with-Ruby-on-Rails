@@ -30,3 +30,33 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Cypress
+/cypress/screenshots
+/cypress/videos
+/cypress/downloads
+
+# Node modules
+/node_modules
+
+# Package manager lock files (optional - uncomment if you want to ignore)
+# /package-lock.json
+
+# Documentation files (optional)
+FRONTEND_REQUIREMENTS.md
+GITHUB_PUSH_GUIDE.md
+
+# Postman/Newman test files
+*.postman_environment
+env_*.json
+newman-test.json
+newman-report.*
+postman_collection.json
+
+# Test scripts
+test_newman.*
+
+# Temporary files
+tmp_patch_*.txt
+*.bak
+

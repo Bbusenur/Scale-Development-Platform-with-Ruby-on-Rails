@@ -1,17 +1,14 @@
 class Api::V1::UsersController < ApplicationController
 
-
-  # Tüm kullanıcıları listeler
   def index
     @users = User.all 
     render json: @users.as_json(except: [:hashed_password, :salt])
   end
   
-   # Kullanıcı Oluşturma
   def create
-    # JSON'dan gelen user_params'a credit_balance'ı ekleriz (SDP Kuralı: Yeni kullanıcı 50 kredi ile başlar)
-    @user = User.new(user_params.merge(credit_balance: 50)) 
-
+    requested_credit = params.dig(:user, :credit_balance) || params[:credit_balance]
+    initial_credit = requested_credit.present? ? requested_credit.to_i : 50
+    @user = User.new(user_params.merge(credit_balance: initial_credit)) 
     if @user.save
       render json: @user.as_json(except: [:hashed_password, :salt]), status: :created 
     else
@@ -19,7 +16,6 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-   # Profil Bilgilerini Okuma
   def show
     @user = User.find(params[:id])
     render json: @user.as_json(except: [:hashed_password, :salt])
@@ -27,7 +23,6 @@ class Api::V1::UsersController < ApplicationController
     render json: { error: "Kullanıcı bulunamadı." }, status: :not_found
   end
 
-  # Kullanıcı Bilgilerini Güncelleme
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
@@ -39,7 +34,6 @@ class Api::V1::UsersController < ApplicationController
     render json: { error: "Güncellenecek kullanıcı bulunamadı." }, status: :not_found
   end
   
-  # DELETE 
   def destroy
     @user = User.find(params[:id])
     @user.destroy!
@@ -51,12 +45,18 @@ class Api::V1::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(
-      :forename, 
-      :surname, 
-      :language, 
-      :role, 
-      :hashed_password
-    )
+    permitted_keys = [
+      :forename,
+      :surname,
+      :language,
+      :role,
+      :hashed_password,
+      :credit_balance
+    ]
+    if params[:user].present?
+      params.require(:user).permit(*permitted_keys)
+    else
+      params.permit(*permitted_keys)
+    end
   end
 end
