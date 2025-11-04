@@ -5,18 +5,33 @@ import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 
 // *** GIVEN ADIMLARI ***
 Given('kullanıcı giriş yapmıştır', () => {
-    cy.visit('/');
-    cy.log('⚠️ Giriş işlemi frontend geliştirildiğinde implement edilecek');
+    // Login işlemi
+    cy.visit('/login');
+    cy.get('[data-testid="email-input"]').type('test@example.com');
+    cy.get('[data-testid="password-input"]').type('password123');
+    cy.get('[data-testid="login-button"]').click();
+    
+    // Login başarılı mı kontrol et
+    cy.get('[data-testid="user-menu"]').should('be.visible');
 });
 
 Given('kullanıcı bir ölçeğe sahiptir', () => {
-    // Ölçek seçimi için placeholder
-    cy.log('⚠️ Ölçek seçimi frontend geliştirildiğinde implement edilecek');
+    // Ölçekler sayfasına git
+    cy.visit('/scales');
+    
+    // En az bir ölçek olduğunu kontrol et
+    cy.get('[data-testid="scale-item"]').should('have.length.at.least', 1);
+    
+    // İlk ölçeği seç
+    cy.get('[data-testid="scale-select"]').click();
+    cy.get('[data-testid="scale-option"]').first().click();
 });
 
 Given('kullanıcının kredi bakiyesi {int} kredidir', (creditAmount) => {
-    // Kredi bakiyesi ayarlama için placeholder
-    cy.log(`⚠️ Kredi bakiyesi ayarlama (${creditAmount}) frontend geliştirildiğinde implement edilecek`);
+    // Kredi bakiyesi kontrolü
+    cy.get('[data-testid="credit-balance"]')
+        .should('be.visible')
+        .and('contain', creditAmount);
 });
 
 // *** WHEN ADIMLARI ***
@@ -28,93 +43,59 @@ When('kullanıcı {string} sayfasına gider', (pageName) => {
     };
 
     const route = pageRoutes[pageName] || '/';
-    cy.visit(route, { failOnStatusCode: false });
-    cy.url().then((url) => {
-        if (url.includes('404')) {
-            cy.log(`⚠️ Frontend henüz hazır değil: "${pageName}" sayfası bulunamadı.`);
-        }
-    });
+    cy.visit(route);
+    
+    // Sayfa yüklenme kontrolü
+    cy.get('[data-testid="main-content"]').should('be.visible');
+    
+    // Sayfa başlığı kontrolü
+    cy.get('[data-testid="page-title"]').should('contain', pageName);
 });
 
 When('kullanıcı {string} alanına {string} yazar', (fieldName, value) => {
-    cy.get('body').then(($body) => {
-        const selectors = [
-            `[data-cy="${fieldName}-input"]`,
-            `input[name="${fieldName}"]`,
-            `textarea[name="${fieldName}"]`,
-            `select[name="${fieldName}"]`
-        ];
-
-        let found = false;
-        for (const selector of selectors) {
-            const $input = $body.find(selector);
-            if ($input.length > 0) {
-                if ($input.is('select')) {
-                    cy.wrap($input).select(value);
-                } else {
-                    cy.wrap($input).clear().type(value);
-                }
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            cy.log(`⚠️ Frontend henüz hazır değil: "${fieldName}" alanı bulunamadı.`);
-        }
-    });
+    // data-testid ile input alanını bul
+    cy.get(`[data-testid="${fieldName}-input"]`)
+        .should('be.visible')
+        .clear()
+        .type(value);
 });
 
 When('kullanıcı {string} butonuna tıklar', (buttonText) => {
-    cy.get('body').then(($body) => {
-        const $buttons = $body.find('button, a.button');
-        let found = false;
-        $buttons.each((index, button) => {
-            if (Cypress.$(button).text().trim().includes(buttonText)) {
-                found = true;
-                cy.wrap(button).click({ force: true });
-                return false;
-            }
-        });
-
-        if (!found) {
-            cy.log(`⚠️ Frontend henüz hazır değil: "${buttonText}" butonu bulunamadı.`);
-        }
-    });
+    // Buton metni ile butonu bul ve tıkla
+    cy.contains('button', buttonText)
+        .should('be.visible')
+        .click();
 });
 
 // *** THEN ADIMLARI ***
 Then('sistem {string} mesajını gösterir', (message) => {
-    cy.get('body').then(($body) => {
-        const $toast = $body.find('.toast-success, .alert-success, .message-success');
-        if ($toast.length > 0 && $toast.is(':visible')) {
-            cy.wrap($toast).should('contain', message);
-        } else {
-            cy.log(`⚠️ Frontend henüz hazır değil: Başarı mesajı gösterilemiyor.`);
-        }
-    });
+    // Başarı mesajını kontrol et
+    cy.get('[data-testid="toast-message"]')
+        .should('be.visible')
+        .and('contain', message);
 });
 
 Then('sistem {string} hata mesajını gösterir', (errorMessage) => {
-    cy.get('body').then(($body) => {
-        const $error = $body.find('.toast-error, .alert-error, .message-error, .error-message');
-        if ($error.length > 0 && $error.is(':visible')) {
-            cy.wrap($error).should('contain', errorMessage);
-        } else {
-            cy.log(`⚠️ Frontend henüz hazır değil: Hata mesajı gösterilemiyor.`);
-        }
-    });
+    // Hata mesajını kontrol et
+    cy.get('[data-testid="error-message"]')
+        .should('be.visible')
+        .and('contain', errorMessage);
 });
 
 Then('kullanıcı kredi bakiyesinin düştüğünü doğrular', () => {
-    cy.get('body').then(($body) => {
-        const $balance = $body.find('[data-cy="credit-balance"], .credit-balance');
-        if ($balance.length > 0) {
-            cy.wrap($balance).should('be.visible');
-            cy.log('Kredi bakiyesi düşmüş olmalı (frontend geliştirildiğinde detaylı kontrol eklenecek)');
-        } else {
-            cy.log('⚠️ Frontend henüz hazır değil: Kredi bakiyesi kontrol edilemiyor.');
-        }
-    });
+    // Önceki kredi miktarını al
+    let previousCredit;
+    cy.get('[data-testid="credit-balance"]')
+        .invoke('text')
+        .then((text) => {
+            previousCredit = parseInt(text);
+        });
+    
+    // İşlem sonrası kredi bakiyesinin düştüğünü kontrol et
+    cy.get('[data-testid="credit-balance"]')
+        .should(($balance) => {
+            const currentCredit = parseInt($balance.text());
+            expect(currentCredit).to.be.lessThan(previousCredit);
+        });
 });
 

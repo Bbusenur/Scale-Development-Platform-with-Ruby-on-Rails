@@ -8,4 +8,14 @@ class Api::V1::CreditTransactionsController < ApplicationController
     
     render json: @transactions
   end
+  
+  def balance
+    # Token'dan user'ı bul
+    @user = current_user
+    if @user
+      render json: { balance: @user.credit_balance || 0 }
+    else
+      render json: { balance: 0 }
+    end
+  end
 end

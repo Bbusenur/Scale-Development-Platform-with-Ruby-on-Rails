@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_29_120000) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_02_112904) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -36,6 +36,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_29_120000) do
     t.index ["user_id"], name: "index_credit_transactions_on_user_id"
   end
 
+  create_table "questions", force: :cascade do |t|
+    t.text "text", null: false
+    t.string "question_type", default: "text"
+    t.bigint "survey_id", null: false
+    t.integer "order", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["survey_id"], name: "index_questions_on_survey_id"
+  end
+
   create_table "responses", force: :cascade do |t|
     t.string "participant_id"
     t.jsonb "raw_data"
@@ -54,6 +64,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_29_120000) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "scale_type"
+    t.text "description"
     t.index ["user_id"], name: "index_scales_on_user_id"
   end
 
@@ -81,6 +93,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_29_120000) do
 
   add_foreign_key "analyses", "surveys"
   add_foreign_key "credit_transactions", "users"
+  add_foreign_key "questions", "surveys"
   add_foreign_key "responses", "surveys"
   add_foreign_key "scales", "users"
   add_foreign_key "surveys", "scales"

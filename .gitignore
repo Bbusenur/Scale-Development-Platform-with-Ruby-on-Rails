@@ -60,3 +60,7 @@ test_newman.*
 tmp_patch_*.txt
 *.bak
 
+# Windows system files
+desktop.ini
+Thumbs.db
+

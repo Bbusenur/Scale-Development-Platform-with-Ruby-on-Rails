@@ -5,142 +5,99 @@ import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 
 // *** GIVEN ADIMLARI ***
 Given('kullanıcı kullanıcı kayıt sayfasına gider', () => {
-    cy.visit('/users/new', { failOnStatusCode: false });
-    cy.url().then((url) => {
-        if (url.includes('404') || url.includes('users/new')) {
-            cy.log('⚠️ Frontend henüz hazır değil: Kullanıcı kayıt sayfası bulunamadı.');
-        }
-    });
+    // Kayıt sayfasına git
+    cy.visit('/signup');
+    
+    // Sayfanın yüklendiğini kontrol et
+    cy.get('[data-testid="signup-form"]').should('be.visible');
+    cy.get('[data-testid="page-title"]').should('contain', 'Kayıt Ol');
 });
 
 Given('kullanıcı giriş yapmıştır', () => {
-    // Giriş işlemi için placeholder - frontend geliştirildiğinde doldurulacak
-    cy.visit('/');
-    cy.log('⚠️ Giriş işlemi frontend geliştirildiğinde implement edilecek');
+    // Login sayfasına git
+    cy.visit('/login');
+    
+    // Giriş bilgilerini doldur
+    cy.get('[data-testid="email-input"]').type('test@example.com');
+    cy.get('[data-testid="password-input"]').type('password123');
+    cy.get('[data-testid="login-button"]').click();
+    
+    // Giriş başarılı mı kontrol et
+    cy.get('[data-testid="user-menu"]').should('be.visible');
 });
 
 // *** WHEN ADIMLARI ***
 When('kullanıcı {string} alanına {string} yazar', (fieldName, value) => {
-    cy.get('body').then(($body) => {
-        const selectors = [
-            `[data-cy="${fieldName}-input"]`,
-            `input[name="${fieldName}"]`,
-            `#${fieldName}`
-        ];
-
-        let found = false;
-        for (const selector of selectors) {
-            const $input = $body.find(selector);
-            if ($input.length > 0) {
-                cy.wrap($input).type(value);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            cy.log(`⚠️ Frontend henüz hazır değil: "${fieldName}" alanı bulunamadı.`);
-        }
-    });
+    // Input alanını bul ve değer gir
+    cy.get(`[data-testid="${fieldName}-input"]`)
+        .should('be.visible')
+        .clear()
+        .type(value);
 });
 
 When('kullanıcı {string} butonuna tıklar', (buttonText) => {
-    cy.get('body').then(($body) => {
-        const $buttons = $body.find('button');
-        let found = false;
-        $buttons.each((index, button) => {
-            if (Cypress.$(button).text().trim().includes(buttonText)) {
-                found = true;
-                cy.wrap(button).click({ force: true });
-                return false;
-            }
-        });
-
-        if (!found) {
-            cy.log(`⚠️ Frontend henüz hazır değil: "${buttonText}" butonu bulunamadı.`);
-        }
-    });
+    // Buton metni ile butonu bul ve tıkla
+    cy.contains('button', buttonText)
+        .should('be.visible')
+        .click();
 });
 
 When('kullanıcı {string} sayfasına gider', (pageName) => {
     const pageRoutes = {
         'Profil': '/profile',
         'Kullanıcı Listesi': '/users',
-        'Anasayfa': '/'
+        'Anasayfa': '/',
+        'Ayarlar': '/settings'
     };
 
     const route = pageRoutes[pageName] || '/';
-    cy.visit(route, { failOnStatusCode: false });
-    cy.url().then((url) => {
-        if (url.includes('404')) {
-            cy.log(`⚠️ Frontend henüz hazır değil: "${pageName}" sayfası bulunamadı.`);
-        }
-    });
+    cy.visit(route);
+    
+    // Sayfa yüklenme kontrolü
+    cy.get('[data-testid="main-content"]').should('be.visible');
+    
+    // Sayfa başlığı kontrolü
+    cy.get('[data-testid="page-title"]').should('contain', pageName);
 });
 
 // *** THEN ADIMLARI ***
 Then('sistem {string} mesajını gösterir', (message) => {
-    cy.get('body').then(($body) => {
-        const $toast = $body.find('.toast-success, .alert-success, .message-success');
-        if ($toast.length > 0 && $toast.is(':visible')) {
-            cy.wrap($toast).should('contain', message);
-        } else {
-            cy.log(`⚠️ Frontend henüz hazır değil: Başarı mesajı gösterilemiyor.`);
-        }
-    });
+    // Başarı mesajını kontrol et
+    cy.get('[data-testid="toast-message"]')
+        .should('be.visible')
+        .and('contain', message);
 });
 
 Then('kullanıcı kredi bakiyesinin görüntülendiğini doğrular', () => {
-    cy.get('body').then(($body) => {
-        const selectors = [
-            '[data-cy="credit-balance"]',
-            '.credit-balance',
-            '#creditBalance'
-        ];
-
-        let found = false;
-        for (const selector of selectors) {
-            const $element = $body.find(selector);
-            if ($element.length > 0) {
-                cy.wrap($element).should('be.visible');
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            cy.log('⚠️ Frontend henüz hazır değil: Kredi bakiyesi gösterilemiyor.');
-        }
-    });
+    // Kredi bakiyesi görüntüleme kontrolü
+    cy.get('[data-testid="credit-balance"]')
+        .should('be.visible')
+        .and('not.be.empty');
 });
 
 Then('kredi bakiyesi {string} gösterir', (condition) => {
-    cy.get('body').then(($body) => {
-        const $balance = $body.find('[data-cy="credit-balance"], .credit-balance, #creditBalance');
-        if ($balance.length > 0) {
-            cy.wrap($balance).invoke('text').then((text) => {
-                const balance = parseFloat(text.replace(/[^\d.-]/g, ''));
-                if (condition.includes('pozitif')) {
-                    cy.wrap(balance).should('be.gte', 0);
-                }
-            });
-        } else {
-            cy.log('⚠️ Frontend henüz hazır değil: Kredi bakiyesi kontrol edilemiyor.');
-        }
-    });
+    // Kredi bakiyesi değer kontrolü
+    cy.get('[data-testid="credit-balance"]')
+        .should('be.visible')
+        .invoke('text')
+        .then((text) => {
+            const balance = parseFloat(text);
+            if (condition.includes('pozitif')) {
+                expect(balance).to.be.gt(0);
+            } else if (condition.includes('sıfır')) {
+                expect(balance).to.equal(0);
+            }
+        });
 });
 
 Then('kredi bakiyesi 0 veya pozitif bir değer gösterir', () => {
-    cy.get('body').then(($body) => {
-        const $balance = $body.find('[data-cy="credit-balance"], .credit-balance, #creditBalance');
-        if ($balance.length > 0) {
-            cy.wrap($balance).invoke('text').then((text) => {
-                const balance = parseFloat(text.replace(/[^\d.-]/g, ''));
-                cy.wrap(balance).should('be.gte', 0);
-            });
-        } else {
-            cy.log('⚠️ Frontend henüz hazır değil: Kredi bakiyesi kontrol edilemiyor.');
-        }
-    });
+    // Kredi bakiyesi pozitif değer kontrolü
+    cy.get('[data-testid="credit-balance"]')
+        .should('be.visible')
+        .invoke('text')
+        .then((text) => {
+            const balance = parseFloat(text);
+            expect(balance).to.be.gte(0);
+        });
 });
 
